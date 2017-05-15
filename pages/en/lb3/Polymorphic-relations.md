@@ -38,7 +38,6 @@ For example, you might have a Picture model that belongs to either an Author mod
 
 The examples below use three example models: Picture, Author, and Reader, where a picture can belong to either an author or reader.
 
-
 <div class="sl-hidden"><strong>REVIEW COMMENT from Rand</strong><br>
   <p>Is it actually "... a picture can belong to <em>both</em> an author and a reader." ?</p>
   <p>Do polymorphic relations add methods to the models as the standard relations do? If so, what?</p>
