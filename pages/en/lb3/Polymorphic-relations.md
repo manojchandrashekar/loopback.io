@@ -47,7 +47,6 @@ The examples below use three example models: Picture, Author, and Reader, where 
 ## HasMany polymorphic relations
 
 The meaning of each parameter in the relation definition:
-
 - `type`: the relation type, in this case is 'hasMany'
 - `as`: redefines **this** relation's name (optional)
 - `model`: name of modelTo
@@ -124,6 +123,73 @@ Reader.hasMany(Picture, { polymorphic: {
 });
 ```
 
+## BelongsTo polymorphic relations
+
+Because you define the related model dynamically, you cannot declare it up front.
+So instead of passing in the related model (name), you specify the name of the polymorphic relation.
+
+The meaning of each parameter in the relation definition:
+- `type`: the relation type, in this case is 'belongsTo'
+- `as`: redefines **this** relation's name (optional)
+- ~~`model`~~: **NOT EXPECTED**: should throw an error as relation validation
+- `polymorphic`:
+  - typeOf `polymorphic` === `Object`
+    - `foreignKey`:  A property of modelTo, representing the fk to modelFrom's id. 
+    - `discriminator`: A property of modelTo, representing the actual modelFrom to be looked up and defined dynamically.
+    - ~~`selector` or `as`~~: **NOT EXPECTED**: should throw an error at relation validation
+  - typeOf `polymorphic` === `Boolean`
+      - `foreignKey` is generated as `relationName + 'Id'`,
+      - `discriminator` is generated as `relationName + 'Type'`
+
+{% include code-caption.html content="common/models/picture.json" %}
+
+```javascript
+{
+  "name": "Picture",
+  "base": "PersistedModel",
+  ...
+  "relations": {
+    "imageable": {
+      "type": "belongsTo",
+      "polymorphic": true
+    }
+  },
+...
+
+// Alternatively, use an object for setup
+
+{
+  "name": "Picture",
+  "base": "PersistedModel",
+  ...
+  "relations": {
+    "imageable": {
+      "type": "belongsTo",
+      "polymorphic": {
+        "foreignKey": "imageableId",
+        "discriminator": "imageableType"
+      }
+    }
+  },
+...
+```
+
+Or, in code:
+
+{% include code-caption.html content="common/models/picture.js" %}
+```javascript
+Picture.belongsTo('imageable', {
+  polymorphic: true
+}); 
+// Alternatively, use an object for setup
+Picture.belongsTo('imageable', {
+  polymorphic: {
+    foreignKey: 'imageableId',
+    discriminator: 'imageableType'
+  }
+});
+```
+
 ## HasManyThrough polymorphic relations
 
 To define a hasMany polymorphic relation, there must be a "through" model, similarly to a standard [HasManyThrough relation](HasManyThrough-relations.html).
@@ -191,74 +257,6 @@ Author.hasMany(Picture, {
   },
   through: ImageLink,
   keyThrough: 'authorId'
-});
-```
-
-## BelongsTo polymorphic relations
-
-Because you define the related model dynamically, you cannot declare it up front.
-So instead of passing in the related model (name), you specify the name of the polymorphic relation.
-
-The meaning of each parameter in the relation definition:
-
-- `type`: the relation type, in this case is 'belongsTo'
-- `as`: redefines **this** relation's name (optional)
-- ~~`model`~~: **NOT EXPECTED**: should throw an error as relation validation
-- `polymorphic`:
-  - typeOf `polymorphic` === `Object`
-    - `foreignKey`:  A property of modelTo, representing the fk to modelFrom's id. 
-    - `discriminator`: A property of modelTo, representing the actual modelFrom to be looked up and defined dynamically.
-    - ~~`selector` or `as`~~: **NOT EXPECTED**: should throw an error at relation validation
-  - typeOf `polymorphic` === `Boolean`
-      - `foreignKey` is generated as `relationName + 'Id'`,
-      - `discriminator` is generated as `relationName + 'Type'`
-
-{% include code-caption.html content="common/models/picture.json" %}
-
-```javascript
-{
-  "name": "Picture",
-  "base": "PersistedModel",
-  ...
-  "relations": {
-    "imageable": {
-      "type": "belongsTo",
-      "polymorphic": true
-    }
-  },
-...
-
-// Alternatively, use an object for setup
-
-{
-  "name": "Picture",
-  "base": "PersistedModel",
-  ...
-  "relations": {
-    "imageable": {
-      "type": "belongsTo",
-      "polymorphic": {
-        "foreignKey": "imageableId",
-        "discriminator": "imageableType"
-      }
-    }
-  },
-...
-```
-
-Or, in code:
-
-{% include code-caption.html content="common/models/picture.js" %}
-```javascript
-Picture.belongsTo('imageable', {
-  polymorphic: true
-}); 
-// Alternatively, use an object for setup
-Picture.belongsTo('imageable', {
-  polymorphic: {
-    foreignKey: 'imageableId',
-    discriminator: 'imageableType'
-  }
 });
 ```
 
