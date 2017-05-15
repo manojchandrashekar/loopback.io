@@ -190,6 +190,19 @@ Picture.belongsTo('imageable', {
 });
 ```
 
+## HasOne polymorphic relations
+
+The relation definitions in 'HasOne' is almost same as 'HasMany', the only difference is `type` should be 'hasOne', for details refer to HasMany polymorphic relations section.
+
+The following code shows how to dynamically define a 'HasOne' polymorphic relation, and also redefines the relation name with `as`: you can specify `as: 'avatar'` to explicitly set the name of the relation. If not set, it defaults to the polymorphic name.
+
+{% include code-caption.html content="/common/models/model.js" %}
+```javascript
+Picture.belongsTo('imageable', {polymorphic: true});
+Author.hasOne(Picture, {as: 'avatar', polymorphic: 'imageable'});
+Reader.hasOne(Picture, {polymorphic: {as: 'imageable'}});
+```
+
 ## HasManyThrough polymorphic relations
 
 To define a hasMany polymorphic relation, there must be a "through" model, similarly to a standard [HasManyThrough relation](HasManyThrough-relations.html).
@@ -289,17 +302,6 @@ Picture.hasMany(Reader, {
   polymorphic: 'imageable',
   invert: true
 });
-```
-
-## HasOne polymorphic relations
-
-As shown here, you can specify `as: 'avatar'` to explicitly set the name of the relation. If not set, it defaults to the polymorphic name.
-
-{% include code-caption.html content="/common/models/model.js" %}
-```javascript
-Picture.belongsTo('imageable', {polymorphic: true});
-Author.hasOne(Picture, {as: 'avatar', polymorphic: 'imageable'});
-Reader.hasOne(Picture, {polymorphic: {as: 'imageable'}});
 ```
 
 ## Dealing with polymorphic.idType
