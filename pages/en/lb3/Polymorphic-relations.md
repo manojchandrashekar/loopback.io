@@ -49,7 +49,7 @@ The examples below use three example models: Picture, Author, and Reader, where 
 The meaning of each parameter in the relation definition:
 
 - `type`: the relation type, in this case is 'hasMany'
-- `as`: redefines this relation's name (optional)
+- `as`: redefines **this** relation's name (optional)
 - `model`: name of modelTo
 - `polymorphic`:
   - typeOf `polymorphic` === `Object`(complete declaration)
@@ -199,16 +199,44 @@ Author.hasMany(Picture, {
 Because you define the related model dynamically, you cannot declare it up front.
 So instead of passing in the related model (name), you specify the name of the polymorphic relation.
 
+The meaning of each parameter in the relation definition:
+
+- `type`: the relation type, in this case is 'belongsTo'
+- `as`: redefines **this** relation's name (optional)
+- ~~`model`~~: **NOT EXPECTED**: should throw an error as relation validation
+- `polymorphic`:
+  - typeOf `polymorphic` === `Object`
+    - `foreignKey`:  A property of modelTo, representing the fk to modelFrom's id. 
+    - `discriminator`: A property of modelTo, representing the actual modelFrom to be looked up and defined dynamically.
+    - ~~`selector` or `as`~~: **NOT EXPECTED**: should throw an error at relation validation
+  - typeOf `polymorphic` === `Boolean`
+      - `foreignKey` is generated as `relationName + 'Id'`,
+      - `discriminator` is generated as `relationName + 'Type'`
+
 {% include code-caption.html content="common/models/picture.json" %}
+
 ```javascript
 {
   "name": "Picture",
   "base": "PersistedModel",
   ...
   "relations": {
-    "author": {
+    "imageable": {
       "type": "belongsTo",
-      "model": "Author",
+      "polymorphic": true
+    }
+  },
+...
+
+// Alternatively, use an object for setup
+
+{
+  "name": "Picture",
+  "base": "PersistedModel",
+  ...
+  "relations": {
+    "imageable": {
+      "type": "belongsTo",
       "polymorphic": {
         "foreignKey": "imageableId",
         "discriminator": "imageableType"
