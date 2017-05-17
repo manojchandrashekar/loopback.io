@@ -49,7 +49,7 @@ Take the following scenario as example:
 
 > A Picture model belongs to either an Author model or a Reader model 
 
-A hasMany polymorphic relation means: there are two properties created in model Picture, one serves as a discriminator, which tells which model the picture actually belongs to, and the other one servers as a foreignKey, which is the primary key's value of either the author or reader.
+A hasMany polymorphic relation means: there are two properties created in model Picture, one serves as a discriminator, which tells which model the picture actually belongs to, and the other one servers as a foreignKey, which is the id(or primaryKey) value of either the author or reader.
 
 This section explains how to define a hasMany polymorphic relation in modelFrom(Author or Reader in example). You need to also define the corresponding belongsTo relation described in the next section "BelongsTo polymorphic relations" to establish the relation completely.
 
