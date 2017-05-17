@@ -240,8 +240,9 @@ author.avatar.create();
 
 To define a hasManyThrough polymorphic relation, there must be a "through" model, for example:
 
-Author hasMany Picture through ImageLink polymorphically
-Reader hasMany Picture through ImageLink polymorphically
+> Author hasMany Picture through ImageLink polymorphically
+>
+> Reader hasMany Picture through ImageLink polymorphically
 
 A hasManyThrough polymorphic relation means the through model has three properties created. The first two are same as those created in the toModel in a hasMany polymorphic relation: one is discriminator(the value is either `Author` or `Reader`) and the other one is foreignKey(the primaryKey's value of either an author or a reader). The third property is a foreignKey property reference model Picture.
 
