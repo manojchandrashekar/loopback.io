@@ -349,7 +349,7 @@ ImageLink.belongsTo(ImageLink, {polymorphic: true});
 hasAndBelongsToMany polymorphic relation is similar to hasManyThrough relation.
 It also requires an explicit 'through' model, in our example: ImageLink
 
-The difference between them is, hasAndBelongsToMany will automatically setup belongsTo relations in ImageLink: `ImageLink.belongsTo(Picture, {})` and `ImageLink.belongsTo(ImageLink, {polymorphic: true})`.
+The difference between them is, hasAndBelongsToMany will automatically setup belongsTo relations in through model: `ImageLink.belongsTo(Picture, {})` and `ImageLink.belongsTo(ImageLink, {polymorphic: true})`.
 
 {% include code-caption.html content="/common/models/model.js" %}
 ```javascript
