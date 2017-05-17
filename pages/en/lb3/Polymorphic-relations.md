@@ -271,10 +271,30 @@ First define relations in through model ImageLink.
 }
 ```
 
-Then in model Picture.
+Then in the Author(or Reader) model.
+{% include code-caption.html content="/common/models/Author.json" %}
+```javascript
+{
+  "name": "Author",
+  "base": "PersistedModel",
+  ...
+  "relations": {
+    "pictures": {
+      "type": "hasMany",
+      "model": "Picture",
+      "through": "ImageLink",
+      "polymorphic": "imageable"
+    }
+  },
+...
+}
+```
+
+OPTIONAL in model Picture.
 
 {% include code-caption.html content="/common/models/Picture.json" %}
 ```javascript
+// Optional, define invert hasMany relation in Picture
 {
   "name": "Picture",
   "base": "PersistedModel",
@@ -292,25 +312,6 @@ Then in model Picture.
       "model": "Reader",
       "through": "ImageLink",
       "invert": true,
-      "polymorphic": "imageable"
-    }
-  },
-...
-}
-```
-
-Finally the Author(or Reader) model.
-{% include code-caption.html content="/common/models/Author.json" %}
-```javascript
-{
-  "name": "Author",
-  "base": "PersistedModel",
-  ...
-  "relations": {
-    "pictures": {
-      "type": "hasMany",
-      "model": "Picture",
-      "through": "ImageLink",
       "polymorphic": "imageable"
     }
   },
@@ -338,10 +339,12 @@ Reader.hasMany(Picture, {
   },
   through: ImageLink
 });
-Picture.hasMany(Author, {through: ImageLink, polymorphic: 'imageable', invert: true});
-Picture.hasMany(Reader, {through: ImageLink, polymorphic: 'imageable', invert: true});
 ImageLink.belongsTo(Picture, {});
 ImageLink.belongsTo(ImageLink, {polymorphic: true});
+
+// Optional define invert hasMany relation in Picture
+Picture.hasMany(Author, {through: ImageLink, polymorphic: 'imageable', invert: true});
+Picture.hasMany(Reader, {through: ImageLink, polymorphic: 'imageable', invert: true});
 ```
 
 ## HasAndBelongsToMany polymorphic relations
