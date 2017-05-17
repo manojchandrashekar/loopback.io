@@ -320,7 +320,7 @@ Finally the Author(or Reader) model.
 
 Equivalently, in JavaScript:
 
-{% include code-caption.html content="/common/models/Author.js" %}
+{% include code-caption.html content="/server/boot/boot-script.js" %}
 ```javascript
 Author.hasMany(Picture, {
   as: 'pictures',
